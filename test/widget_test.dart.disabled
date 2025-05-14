@@ -1,0 +1,37 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import 'package:ceara_big_heads/main.dart';
+
+void main() {
+  testWidgets('Verificar carregamento inicial da aplicação', (WidgetTester tester) async {
+    // Constrói nosso aplicativo e dispara um frame.
+    await tester.pumpWidget(ceara_big_heads());
+
+    // Verifica se o título do aplicativo aparece na AppBar
+    expect(find.text('Destinos Turísticos'), findsOneWidget);
+
+    // Verifica se pelo menos um dos destinos é exibido
+    expect(find.text('Rio de Janeiro'), findsOneWidget);
+
+    // Verifica se o ícone de favoritos está presente
+    expect(find.byIcon(Icons.favorite_border), findsAtLeastNWidgets(1));
+
+    // Verifica se o ícone de mapa está presente
+    expect(find.byIcon(Icons.map), findsAtLeastNWidgets(1));
+  });
+
+  testWidgets('Teste de navegação para detalhes do destino', (WidgetTester tester) async {
+    // Constrói nosso aplicativo e dispara um frame.
+    await tester.pumpWidget(ceara_big_heads());
+
+    // Localiza o card do Rio de Janeiro e toca nele
+    await tester.tap(find.text('Rio de Janeiro'));
+    await tester.pumpAndSettle(); // Aguarda a animação de navegação
+
+    // Verifica se estamos na tela de detalhes
+    expect(find.text('Sobre'), findsOneWidget);
+    expect(find.text('Melhores épocas para visitar'), findsOneWidget);
+    expect(find.text('Ver no Mapa'), findsOneWidget);
+  });
+}
